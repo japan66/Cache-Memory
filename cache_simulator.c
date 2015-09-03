@@ -11,6 +11,8 @@ char line[5];  /* declare a char array */
 int hit_counter = 0;
 int capacity_counter = 0;
 int conflict_counter = 0;
+int compulsary_counter = 0;
+int randaap = 0;
 
 int main(int argc, char *argv[]) {
 
@@ -34,6 +36,7 @@ int main(int argc, char *argv[]) {
 		printf("Total number of HITS = %d\n", hit_counter);
 		printf("Total number of CAPACITY MISSES = %d\n", capacity_counter);
 		printf("Total number of CONFLICT MISSES = %d\n", conflict_counter);
+		printf("Total number of COMPULSARY MISSES = %d\n", compulsary_counter);
 
 
 
@@ -110,6 +113,15 @@ void memory_map(int groups, int blocks, int blockLength) {
       }
 
 
+
+			while () {
+				cache[group][a][1] = tag;
+	      cache[group][a][2] = 1;
+	      cache[group][a][3] = counter++;
+	      printf("%d\t: %d\t: %d\t- COMPULSARY MISS\n", addresses[i], tag, group);
+				randaap++;
+				compulsary_counter++;
+			}
 
 			if (tag < blockLength) {
       cache[group][a][1] = tag;
