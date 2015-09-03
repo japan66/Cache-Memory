@@ -8,6 +8,9 @@ int  i = 0, totalNums;
 int addresses[488]; // wc -l cache.txt // get the number of Addresses
 int atoi ( const char * str );
 char line[5];  /* declare a char array */
+int hit_counter = 0;
+int capacity_counter = 0;
+int conflict_counter = 0;
 
 int main(int argc, char *argv[]) {
 
@@ -28,6 +31,11 @@ int main(int argc, char *argv[]) {
 		run_simulation(64, 8, 1); // set to 1 for fully associative
 
 		printf("\n---------------------------------------------------\n");
+		printf("Total number of HITS = %d\n", hit_counter);
+		printf("Total number of CAPACITY MISSES = %d\n", capacity_counter);
+		printf("Total number of CONFLICT MISSES = %d\n", conflict_counter);
+
+
 
 	}
 	return 0;
@@ -36,7 +44,7 @@ int main(int argc, char *argv[]) {
 int read_cache_file()
 {
 	FILE *file;
-  file = fopen("cache.txt", "r");   // reading the cache file from the cahche .h 
+  file = fopen("cache.txt", "r");   // reading the cache file from the cahche .h
 
   while (fgets(line, sizeof line, file) != NULL) {
 		int uv = strtoul(line, NULL, 16);
@@ -51,8 +59,8 @@ int read_cache_file()
 }
 
 void run_simulation(int size, int length, int groups) {
-	int blocks = size/length; //block of the memory 
-	memory_map(groups, blocks, length);        //memory mapping the address of the memory is group 
+	int blocks = size/length; //block of the memory
+	memory_map(groups, blocks, length);        //memory mapping the address of the memory is group
 }
 
 void memory_map(int groups, int blocks, int blockLength) {
@@ -69,7 +77,7 @@ void memory_map(int groups, int blocks, int blockLength) {
       }
     }
 	}
-// assining the tag group and the logic of hit and miss 
+// assining the tag group and the logic of hit and miss
   int i, j, last = -1, a,c;
   int* parts;
 
@@ -87,6 +95,7 @@ void memory_map(int groups, int blocks, int blockLength) {
     }
     if (hit == 1) {
       printf("%d\t: %d\t: %d\t- HIT\n", addresses[i], tag, group);
+			hit_counter++;
       //hit = 0; //reset Hit
     } else {
       for (j = 0; j < memoryblock; j++) {
@@ -99,15 +108,31 @@ void memory_map(int groups, int blocks, int blockLength) {
           break;
         }
       }
+
+
+
+			if (tag < blockLength) {
       cache[group][a][1] = tag;
       cache[group][a][2] = 1;
       cache[group][a][3] = counter++;
-      printf("%d\t: %d\t: %d\t- MISS\n", addresses[i], tag, group);
+      printf("%d\t: %d\t: %d\t- CONFLICT MISS\n", addresses[i], tag, group);
+			conflict_counter++;
+		}
+
+		else{
+			cache[group][a][1] = tag;
+      cache[group][a][2] = 1;
+      cache[group][a][3] = counter++;
+      printf("%d\t: %d\t: %d\t- CAPACITY MISS\n", addresses[i], tag, group);
+			capacity_counter++;
+			}
+
+
     }
   }
 }
 
-int* get_result (int address, int groups, int blockLength) // main coding 
+int* get_result (int address, int groups, int blockLength) // main coding
 {
   int tagField, groupField;
 	tagField = address/groups;
