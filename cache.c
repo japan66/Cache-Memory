@@ -37,9 +37,12 @@ int* splitAddress (int address, int group, int blockLength);
  */
 
 // Sample Address Sequence
-int addresses[] = {0, 4, 8, 12, 48, 16, 80, 8, 12, 0, 0, 6, 10};
+// int addresses[] = {0, 4, 8, 12, 48, 16, 80, 8, 12, 0, 0, 6, 10};
+int addresses[] = {0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 80, 0, 4, 8, 12, 16, 71, 3, 41, 81, 39, 38, 71, 15, 39, 11, 51, 57, 41};
 
-int addresseslength = 13;
+int addresseslength = sizeof(addresses);
+int hit_counter = 0;
+int miss_counter = 0;
 
 
 int main () {
@@ -52,6 +55,9 @@ int main () {
 
         printf("\n  Fully associative\n");
         simulate(16, 4, 1);
+
+        printf("Total number of hits = %d\n", hit_counter);
+        printf("Total number of misses = %d\n", miss_counter);
 
 }
 
@@ -103,7 +109,7 @@ void associative (int groups, int blocks, int blockLength) {
                         }
                 }
         }
-        //printf("size after zeros: %d", cache):
+        // printf("size after zeros: %d", cache):
 
         int i, j;
         int oldest = -1;
@@ -129,9 +135,12 @@ void associative (int groups, int blocks, int blockLength) {
                 }
 
                 // If it is here print a HIT else find a space for it.
+
                 if (hit == 1) {
                         //printf("%d - HIT\n", addresses[i]);
                         printf("%d : %d :: %d - HIT\n", addresses[i], tag, group);
+                        hit_counter++;
+
                   hit = 0;
                 }       else {
                         // Check if there is an empty block, if so, get the group
@@ -152,6 +161,8 @@ void associative (int groups, int blocks, int blockLength) {
                         cache[group][spot][3] = counter++;
                         //printf("%d - MISS\n", addresses[i]);
                         printf("%d : %d :: %d - MISS\n", addresses[i], tag, group);
+                        miss_counter++;
+
                 }
         }
 }
