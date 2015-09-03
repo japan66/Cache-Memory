@@ -12,7 +12,6 @@ int hit_counter = 0;
 int capacity_counter = 0;
 int conflict_counter = 0;
 int compulsary_counter = 0;
-int randaap = 0;
 
 int main(int argc, char *argv[]) {
 
@@ -49,7 +48,7 @@ int read_cache_file()
 	FILE *file;
   file = fopen("cache.txt", "r");   // reading the cache file from the cahche .h
 
-  while (fgets(line, sizeof line, file) != NULL) {
+  while (fgets(line, sizeof(line), file) != NULL) {
 		int uv = strtoul(line, NULL, 16);
 		//printf("%u\n", uv);
   	addresses[i] = uv;
@@ -112,29 +111,20 @@ void memory_map(int groups, int blocks, int blockLength) {
         }
       }
 
+			cache[group][a][1] = tag;
+      cache[group][a][2] = 1;
 
-
-			while () {
-				cache[group][a][1] = tag;
-	      cache[group][a][2] = 1;
-	      cache[group][a][3] = counter++;
-	      printf("%d\t: %d\t: %d\t- COMPULSARY MISS\n", addresses[i], tag, group);
-				randaap++;
+			if (addresses[i] == tag) {
+				printf("%d\t: %d\t: %d\t- COMPULSARY MISS\n", addresses[i], tag, group);
 				compulsary_counter++;
 			}
+			else if (tag < blockLength) {
 
-			if (tag < blockLength) {
-      cache[group][a][1] = tag;
-      cache[group][a][2] = 1;
-      cache[group][a][3] = counter++;
       printf("%d\t: %d\t: %d\t- CONFLICT MISS\n", addresses[i], tag, group);
 			conflict_counter++;
 		}
 
-		else{
-			cache[group][a][1] = tag;
-      cache[group][a][2] = 1;
-      cache[group][a][3] = counter++;
+		else {
       printf("%d\t: %d\t: %d\t- CAPACITY MISS\n", addresses[i], tag, group);
 			capacity_counter++;
 			}
